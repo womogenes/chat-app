@@ -1,4 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+} from "react";
 import './App.css';
 import {
   ChatMessageList,
@@ -11,7 +15,6 @@ if (/^\s*$/.test(name)) name = 'Anonymous';
 
 const App = (props) => {
   const { io } = props;
-  
   const [messages, setMessages] = useState([]);
   
   const messagesRef = useRef();

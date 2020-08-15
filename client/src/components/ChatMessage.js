@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, createRef } from 'react';
 
 const ChatMessage = (props) => {
   return (
@@ -19,6 +19,11 @@ const InfoMessage = (props) => {
 
 const SendForm = (props) => {
   const [newMessage, setNewMessage] = useState('');
+  const messageInput = createRef();
+  
+  useEffect(() => {
+    messageInput.current.focus();
+  }, [messageInput]);
   
   const handleMessageChange = (event) => {
     setNewMessage(event.target.value);
@@ -33,7 +38,14 @@ const SendForm = (props) => {
   
   return (
     <form id="send-container" onSubmit={submitAction}>
-      <input id='message-input' value={newMessage} onChange={handleMessageChange} />
+      <p>$</p>
+      <input id='message-input'
+        ref={messageInput}
+        value={newMessage}
+        onChange={handleMessageChange}
+        autocomplete="false"
+        spellcheck="false"
+      />
       <button id='send-button'>Send</button>
     </form>
   );
