@@ -37,14 +37,14 @@ const SendForm = (props) => {
   }
   
   return (
-    <form id="send-container" onSubmit={submitAction}>
-      <p>$</p>
+    <form id="send-container"
+      onSubmit={submitAction}
+      autoComplete="off"
+    >
       <input id='message-input'
         ref={messageInput}
         value={newMessage}
         onChange={handleMessageChange}
-        autocomplete="false"
-        spellcheck="false"
       />
       <button id='send-button'>Send</button>
     </form>
@@ -55,16 +55,20 @@ const ChatMessageList = (props) => {
   const { messages } = props;
   
   return (
-    <div id="message-container">
-      {
-        messages.map(message => {
-          if (message.type === 'info') {
-            return <InfoMessage key={message.id} text={message.text} />
-          } else {
-            return <ChatMessage key={message.id} name={message.name} text={message.text} />
+    <div id='message-wrapper'>
+      <div id='message-container'>
+        <div id='message-content'>
+          {
+            messages.map(message => {
+              if (message.type === 'info') {
+                return <InfoMessage key={message.id} text={message.text} />
+              } else {
+                return <ChatMessage key={message.id} name={message.name} text={message.text} />
+              }
+            })
           }
-        })
-      }
+        </div>
+      </div>
     </div>
   );
 }

@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "start": "node server.js",
-    "devStart": "nodemon server.js"
+    "devStart": "nodemon server.js",
+    "heroku-postbuild": "cd client && npm install && npm build"
   },
   "dependencies": {
     "express": "4.17.1",
