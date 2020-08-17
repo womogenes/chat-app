@@ -9,7 +9,7 @@ import {
 } from './components/ChatMessage.js';
 
 let id = 0;
-let name = prompt('Please enter your name: ');
+let name = '';
 if (/^\s*$/.test(name)) name = 'Anonymous';
 
 const ChatPage = (props) => {

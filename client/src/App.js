@@ -5,6 +5,9 @@ import {
   Route,
   Redirect
 } from 'react-router-dom';
+import './App.css';
+import './ChatPage.css';
+import './LoginPage.css';
 import { ChatPage } from './ChatPage.js';
 import { LoginPage } from './LoginPage.js';
 
