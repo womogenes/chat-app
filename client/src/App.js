@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import {
   BrowserRouter as Router,
   Switch,
@@ -6,13 +6,10 @@ import {
   Redirect
 } from 'react-router-dom';
 import './App.css';
-import './ChatPage.css';
-import './LoginPage.css';
-import { ChatPage } from './ChatPage.js';
-import { LoginPage } from './LoginPage.js';
+const ChatPage = React.lazy(() => import( './components/ChatPage.js'));
+const LoginPage = React.lazy(() => import('./components/LoginPage.js'));
 
-const App = (props) => {
-  const { io } = props;
+const App = () => {
   
   return (
     <Router>
@@ -22,13 +19,10 @@ const App = (props) => {
           <Redirect to='/login' />
         </Route>
 
-        <Route path='/login'>
-          <LoginPage io={io} />
-        </Route>
-
-        <Route path='/chat'>
-          <ChatPage io={io} />
-        </Route>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Route path='/login' component={LoginPage} />
+          <Route path='/chat' component={ChatPage} />
+        </Suspense>
         
       </Switch>
     </Router>

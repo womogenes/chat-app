@@ -3,17 +3,24 @@ import React, {
   useEffect,
   useRef
 } from 'react';
-import {
-  ChatMessageList,
-  SendForm
-} from './components/ChatMessage.js';
+import socketIO from 'socket.io-client';
+import './ChatPage.css';
+import ChatMessageList from './ChatMessage.js';
+import SendForm from './SendForm.js';
+
+const ENDPOINT;
+if (!process.env.NODE_ENV || process.env.NODE_ENV == 'development') {
+  ENDPOINT = 'http://localhost:5000';
+} else {
+  ENDPOINT = '/';
+}
+const io = socketIO(ENDPOINT);
 
 let id = 0;
 let name = '';
 if (/^\s*$/.test(name)) name = 'Anonymous';
 
-const ChatPage = (props) => {
-  const { io } = props;
+const ChatPage = () => {
 
   const [messages, setMessages] = useState([]);
   
@@ -55,4 +62,4 @@ const ChatPage = (props) => {
   );
 };
 
-export { ChatPage };
+export default ChatPage;
