@@ -1,0 +1,14 @@
+[
+  {
+    "name": "admin",
+    "password": "$2b$10$PGS0008xX/WVlPMeCLcoAuYcVcKjx8qFzF/ScWtRZORBAJWPupgUS"
+  },
+  {
+    "name": "hello",
+    "password": "$2b$10$2Nx9zfOeiHWMqW4U5LZ8xeZz2es4nLMbRhj1zziDq/Nzr/73qKB.a"
+  },
+  {
+    "name": "bill9000",
+    "password": "$2b$10$C/U/QfctOL3BW8MdfMSBbuGKRdgXq7e/m5pJPj7tsAThlra854qJi"
+  }
+]

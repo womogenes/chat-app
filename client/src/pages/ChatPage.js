@@ -4,12 +4,12 @@ import React, {
   useRef
 } from 'react';
 import socketIO from 'socket.io-client';
-import './ChatPage.css';
-import ChatMessageList from './ChatMessage.js';
-import SendForm from './SendForm.js';
+import './css/ChatPage.css';
+import ChatMessageList from '../components/ChatMessage.js';
+import SendForm from '../components/SendForm.js';
 
-const ENDPOINT;
-if (!process.env.NODE_ENV || process.env.NODE_ENV == 'development') {
+let ENDPOINT = null;
+if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
   ENDPOINT = 'http://localhost:5000';
 } else {
   ENDPOINT = '/';
@@ -21,7 +21,6 @@ let name = '';
 if (/^\s*$/.test(name)) name = 'Anonymous';
 
 const ChatPage = () => {
-
   const [messages, setMessages] = useState([]);
   
   const messagesRef = useRef();

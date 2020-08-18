@@ -2,7 +2,7 @@ import React, {
   useState
 } from 'react';
 import axios from 'axios';
-import './css/LoginPage.css';
+import './css/RegisterPage.css';
 import {
   faUser,
   faKey
@@ -11,27 +11,21 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const StatusDisplay = (props) => {
   const { status } = props;
-  console.log(status);
 
   if (status === 'not-submitted') {
     return <p></p>;
   }
   if (status === 'success') {
-    return <p id='success-status'>Success!</p>
+    return <p id='success-status'>Account successfully created.</p>
   }
-  if (status === 'no-username') {
+  if (status === 'username-exists') {
     return (
-      <p id='no-username-status'>That username does not exist.</p>
-    );
-  }
-  if (status === 'wrong-password') {
-    return (
-      <p id='wrong-password-status'>Incorrect password.</p>
+      <p id='username-exists-status'>That username is already taken.<br />Please try a different username.</p>
     );
   }
 }
 
-const LoginPage = () => {
+const RegisterPage = () => {
   const [status, setStatus] = useState('not-submitted');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -46,13 +40,13 @@ const LoginPage = () => {
     hostname = '/';
   }
 
-  const logIn = (event) => {
+  const register = (event) => {
     event.preventDefault();
     if (username === '' || password === '') {
       setStatus('not-submitted');
       return;
     }
-    const url = new URL('/users/login', hostname);
+    const url = new URL('/users', hostname);
     const data = {
       'name': username,
       'password': password
@@ -69,16 +63,13 @@ const LoginPage = () => {
   }
 
   return (
-    <div id='login-root'>
+    <div id='register-root'>
       <div id='content-wrapper'>
-        <h2 id='header'>Chat App Login</h2>
-        <p id='desc'>I tried using OAuth but it was too complicated.
-          So intead, here I'm using the more standard but just as 
-          secure option. Your password is salted and hashed, just 
-          like any other secure password system.</p>
+        <h2 id='header'>Register an Account</h2>
+        <p id='desc'>Create an account below.</p>
         
-        <div id='login-container'>
-          <form id='login-form' onSubmit={logIn}>
+        <div id='register-container'>
+          <form id='register-form' onSubmit={register}>
             <label htmlFor='username-input'>
               <FontAwesomeIcon className='FontAwesomeIcon' icon={faUser} /><p>Username</p>
             </label>
@@ -89,7 +80,7 @@ const LoginPage = () => {
             </label>
             <input id='password-input' type='password' onChange={handlePasswordChange} placeholder='Password' autoComplete='false' />
 
-            <button id='submit-button'>Login</button>
+            <button id='submit-button'>Register</button>
           </form>
         </div>
 
@@ -101,4 +92,4 @@ const LoginPage = () => {
   )
 }
 
-export default LoginPage;
+export default RegisterPage;

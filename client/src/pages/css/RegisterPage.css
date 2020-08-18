@@ -1,4 +1,4 @@
-#login-root {
+#register-root {
   display: flex;
   justify-content: center;
   padding: 0 20px;
@@ -11,6 +11,7 @@
   margin: 0 50px;
   max-width: 500px;
   padding: 50px;
+  padding-top: 10px;
   padding-bottom: 20px;
   border: 1px solid #000;
   border-top: none;
@@ -35,12 +36,12 @@ label {
   margin-right: 2px;
 }
 
-#login-container {
+#register-container {
   display: flex;
   justify-content: center;
 }
 
-#login-form {
+#register-form {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -63,6 +64,7 @@ label {
 
 #desc {
   margin-bottom: 20px;
+  text-align: center;
 }
 
 #status-display {
@@ -70,7 +72,7 @@ label {
   justify-content: center;
   font-size: 11pt;
   padding-top: 10px;
-  color: rgb(219, 0, 0);
+  color: #db0000;
 }
 
 #status-display #success-status {
