@@ -1,8 +1,11 @@
 import React, {
   useState
 } from 'react';
+import {
+  Link
+} from 'react-router-dom';
 import axios from 'axios';
-import './css/RegisterPage.css';
+import './css/RegisterPage.scss';
 import {
   faUser,
   faKey
@@ -16,7 +19,12 @@ const StatusDisplay = (props) => {
     return <p></p>;
   }
   if (status === 'success') {
-    return <p id='success-status'>Account successfully created.</p>
+    return (
+      <>
+      <p id='success-status'>Account successfully created.</p>
+      <Link to='/login'>Click here to sign in.</Link>
+      </>
+    );
   }
   if (status === 'username-exists') {
     return (
@@ -48,7 +56,7 @@ const RegisterPage = () => {
     }
     const url = new URL('/users', hostname);
     const data = {
-      'name': username,
+      'username': username,
       'password': password
     };
     axios.post(url, data)
@@ -67,6 +75,10 @@ const RegisterPage = () => {
       <div id='content-wrapper'>
         <h2 id='header'>Register an Account</h2>
         <p id='desc'>Create an account below.</p>
+
+        <div id='login-link'>
+          <Link to='/login'><p>Or, click here to sign in.</p></Link>
+        </div>
         
         <div id='register-container'>
           <form id='register-form' onSubmit={register}>

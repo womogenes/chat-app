@@ -1,8 +1,12 @@
 import React, {
   useState
 } from 'react';
+import {
+  Link,
+  Redirect
+} from 'react-router-dom';
 import axios from 'axios';
-import './css/LoginPage.css';
+import './css/LoginPage.scss';
 import {
   faUser,
   faKey
@@ -11,7 +15,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const StatusDisplay = (props) => {
   const { status } = props;
-  console.log(status);
 
   if (status === 'not-submitted') {
     return <p></p>;
@@ -31,7 +34,9 @@ const StatusDisplay = (props) => {
   }
 }
 
-const LoginPage = () => {
+const LoginPage = (props) => {
+  const { setAuthToken } = props;
+
   const [status, setStatus] = useState('not-submitted');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -54,18 +59,26 @@ const LoginPage = () => {
     }
     const url = new URL('/users/login', hostname);
     const data = {
-      'name': username,
+      'username': username,
       'password': password
     };
     axios.post(url, data)
       .then(res => {
         console.log(res);
+        const token = res.data.accessToken;
+        setAuthToken(token);
         setStatus('success');
       })
       .catch(error => {
         console.log(error.response.data);
         setStatus(error.response.data);
       });
+  }
+
+  if (localStorage.getItem('authToken') != null) {
+    return (
+      <Redirect to='/chat' />
+    )
   }
 
   return (
@@ -77,6 +90,10 @@ const LoginPage = () => {
           secure option. Your password is salted and hashed, just 
           like any other secure password system.</p>
         
+        <div id='register-link'>
+          <Link to='/register'><p>Don't have an account? Register here.</p></Link>
+        </div>
+
         <div id='login-container'>
           <form id='login-form' onSubmit={logIn}>
             <label htmlFor='username-input'>

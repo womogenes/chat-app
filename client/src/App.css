@@ -55,6 +55,13 @@ button:active {
   background-color: #aaa;
 }
 
+#loading-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
 #root {
   position: absolute;
   width: 100%;

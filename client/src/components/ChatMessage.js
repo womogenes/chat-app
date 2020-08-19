@@ -28,9 +28,11 @@ const ChatMessageList = (props) => {
             messages.map(message => {
               if (message.type === 'info') {
                 return <InfoMessage key={message.id} text={message.text} />
-              } else {
+              }
+              if (message.type === 'chat') {
                 return <ChatMessage key={message.id} name={message.name} text={message.text} />
               }
+              return null;
             })
           }
         </div>
