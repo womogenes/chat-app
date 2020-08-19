@@ -32,6 +32,7 @@ const StatusDisplay = (props) => {
       <p id='wrong-password-status'>Incorrect password.</p>
     );
   }
+  return null;
 }
 
 const LoginPage = (props) => {
@@ -48,8 +49,9 @@ const LoginPage = (props) => {
   if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
     hostname = 'http://localhost:5000';
   } else {
-    hostname = '/';
+    hostname = window.location.origin;
   }
+  console.log(hostname);
 
   const logIn = (event) => {
     event.preventDefault();

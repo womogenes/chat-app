@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
+const bcrypt = require('bcrypt');
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -59,7 +60,7 @@ app.post('/users/login', cors(), async (req, res) => {
   if (user == null) {
     return res.status(400).send('no-username');
   }
-  try {
+  if (true) { //try {
     if (await bcrypt.compare(password, user.password)) {
       // Correct password!
       const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
@@ -69,7 +70,7 @@ app.post('/users/login', cors(), async (req, res) => {
       console.log('wrong password');
       res.status(400).send('wrong-password');
     }
-  } catch {
+  } else { //} catch {
     res.status(500).send();
   }
 });
@@ -77,7 +78,7 @@ app.post('/users/login', cors(), async (req, res) => {
 // Handles any requests that don't match the ones above
 app.get('*', (req, res) => {
   console.log('uh-oh');
-  res.sendFile(path.join(__dirusername + '/client/build/index.html'));
+  res.sendFile(path.join(__dirname + '/client/build/index.html'));
 });
 
 const port = process.env.PORT || 5000;

@@ -45,7 +45,7 @@ const RegisterPage = () => {
   if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
     hostname = 'http://localhost:5000';
   } else {
-    hostname = '/';
+    hostname = window.location.origin;
   }
 
   const register = (event) => {

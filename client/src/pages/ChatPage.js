@@ -59,6 +59,10 @@ const ChatPage = (props) => {
     });
 
     io.on('login-attempt', data => addInfoMessage(data));
+
+    return () => {
+      io.close();
+    }
   }
   
   const onSendMessage = (message) => {
