@@ -13,7 +13,7 @@ import SendForm from '../components/SendForm.js';
 
 let ENDPOINT = null;
 if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
-  ENDPOINT = 'http://localhost:5001';
+  ENDPOINT = 'http://localhost:5000';
 } else {
   ENDPOINT = '/';
 }

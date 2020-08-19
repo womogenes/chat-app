@@ -6,7 +6,6 @@
   "scripts": {
     "start": "node server.js",
     "devStart": "nodemon server.js",
-    "devAuthStart": "nodemon authServer.js",
     "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "dependencies": {
