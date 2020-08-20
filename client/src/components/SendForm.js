@@ -32,6 +32,8 @@ const SendForm = (props) => {
         ref={messageInput}
         value={newMessage}
         onChange={handleMessageChange}
+        autoComplete='false'
+        spellCheck='false'
       />
     </form>
   );
