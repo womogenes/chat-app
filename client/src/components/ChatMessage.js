@@ -4,14 +4,17 @@ const ChatMessage = (props) => {
   const { displayName } = props;
   if (displayName) {
     return (
-      <div className='chat-message' key={props.id}>
-        <p className='chat-message-name'>{props.name}</p><br />
-        
-        <div className='chat-message-timetext'>
-          <p className='chat-message-text'>{props.text}</p>
-          <p className='chat-message-time'>{props.timestamp}</p>
+      <>
+        <br />
+        <div className='chat-message' key={props.id}>
+          <p className='chat-message-name'>{props.name}</p><br />
+          
+          <div className='chat-message-timetext'>
+            <p className='chat-message-text'>{props.text}</p>
+            <p className='chat-message-time'>{props.timestamp}</p>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
   return (

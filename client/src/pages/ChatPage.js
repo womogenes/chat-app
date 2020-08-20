@@ -10,6 +10,7 @@ import socketIO from 'socket.io-client';
 import './css/ChatPage.scss';
 import ChatMessageList from '../components/ChatMessage.js';
 import SendForm from '../components/SendForm.js';
+import ActiveUserList from '../components/ActiveUserList.js';
 
 let ENDPOINT = null;
 if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
@@ -19,16 +20,19 @@ if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
 }
 const io = socketIO(ENDPOINT);
 
+let myUsername = null;
+
 const ChatPage = () => {
   const [messages, setMessages] = useState([]);
-  
-  const authToken = localStorage.getItem('authToken');
-  
+  const [activeUsers, setActiveUsers] = useState([]);
   const messagesRef = useRef();
   messagesRef.current = messages;
+  const activeUsersRef = useRef();
+  activeUsersRef.current = activeUsers;
+  const authToken = localStorage.getItem('authToken');
 
-  console.log(messagesRef.current);
-  
+  console.log(activeUsers);
+
   // Add a new message handle.
   const addHistory = (history) => {
     const existingLength = messagesRef.current.length;
@@ -42,7 +46,6 @@ const ChatPage = () => {
         })
       )
     );
-    console.log(history);
   };
   const addInfoMessage = (text) => {
     const newMessage = {
@@ -77,17 +80,32 @@ const ChatPage = () => {
       addInfoMessage('Awaiting response from server...');
     }
 
+    io.on('active-users', users => setActiveUsers(users));
+
     io.on('chat-history', history => addHistory(history));
 
     io.on('error-message', error => addErrorMessage(error));
 
-    io.on('user-connected', name => addInfoMessage(`${name} has connected.`));
-
-    io.on('chat-message', data => {
-      addChatMessage(data.username, data.message, data.timestamp)
+    io.on('user-connected', (name, id) => {
+      addInfoMessage(`${name} has connected.`);
+      if (name === myUsername) return;
+      setActiveUsers([...activeUsersRef.current, { name: name, id: id }]);
     });
 
-    io.on('login-attempt', data => addInfoMessage(data));
+    io.on('user-disconnected', name => {
+      addInfoMessage(`${name} has disconnected.`);
+      if (name === myUsername) return;
+      setActiveUsers(activeUsersRef.current.filter(user => user.name !== name));
+    })
+
+    io.on('chat-message', data => {
+      addChatMessage(data.username, data.message, data.timestamp);
+    });
+
+    io.on('login-attempt', data => {
+      myUsername = data;
+      addInfoMessage(`You have joined. (Username ${data})`);
+    });
 
     return () => {
       io.close();
@@ -118,10 +136,17 @@ const ChatPage = () => {
 
   return (
     <div id='chat-root'>
-      <div id='header'><h2>Chat Lobby</h2></div>
-      <div id='chat-wrapper'>
-        <ChatMessageList messages={messages} />
-        <SendForm submitAction={onSendMessage} />
+      <div id='header'>
+        <h2>Chat Lobby</h2>
+      </div>
+      <div id='content-wrapper'>
+        <div id='chat-wrapper'>
+          <ChatMessageList messages={messages} />
+          <SendForm submitAction={onSendMessage} />
+        </div>
+        <div id='active-user-list-wrapper'>
+          <ActiveUserList activeUsers={activeUsers} />
+        </div>
       </div>
     </div>
   );
