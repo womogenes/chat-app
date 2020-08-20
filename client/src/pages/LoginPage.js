@@ -20,7 +20,12 @@ const StatusDisplay = (props) => {
     return <p></p>;
   }
   if (status === 'success') {
-    return <p id='success-status'>Success!</p>
+    return (
+      <>
+      <p id='success-status'>Success!</p>
+      <Redirect to='/chat' />
+      </>
+    )
   }
   if (status === 'no-username') {
     return (
@@ -75,12 +80,6 @@ const LoginPage = (props) => {
         console.log(error.response.data);
         setStatus(error.response.data);
       });
-  }
-
-  if (localStorage.getItem('authToken') != null) {
-    return (
-      <Redirect to='/chat' />
-    )
   }
 
   return (

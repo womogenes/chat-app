@@ -33,7 +33,6 @@ const SendForm = (props) => {
         value={newMessage}
         onChange={handleMessageChange}
       />
-      <button id='send-button'>Send</button>
     </form>
   );
 }

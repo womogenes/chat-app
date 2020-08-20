@@ -19,15 +19,31 @@ if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
 }
 const io = socketIO(ENDPOINT);
 
-const ChatPage = (props) => {
+const ChatPage = () => {
   const [messages, setMessages] = useState([]);
   
   const authToken = localStorage.getItem('authToken');
   
   const messagesRef = useRef();
   messagesRef.current = messages;
+
+  console.log(messagesRef.current);
   
   // Add a new message handle.
+  const addHistory = (history) => {
+    const existingLength = messagesRef.current.length;
+    setMessages(
+      messagesRef.current.concat(
+        history.map((message, index) => {
+          return {
+            ...message,
+            id: index + existingLength
+          };
+        })
+      )
+    );
+    console.log(history);
+  };
   const addInfoMessage = (text) => {
     const newMessage = {
       type: 'info',
@@ -35,7 +51,15 @@ const ChatPage = (props) => {
       id: messagesRef.current.length
     };
     setMessages([...messagesRef.current, newMessage]);
-  }
+  };
+  const addErrorMessage = (error) => {
+    const newMessage = {
+      type: 'error',
+      text: error,
+      id: messagesRef.current.length
+    };
+    setMessages([...messagesRef.current, newMessage]);
+  };
   const addChatMessage = (name, text) => {
     const newMessage = {
       type: 'chat',
@@ -49,12 +73,16 @@ const ChatPage = (props) => {
   const setIO = () => {
     if (authToken != null) {
       io.emit('login', authToken);
+      addInfoMessage('Awaiting response from server...');
     }
+
+    io.on('chat-history', history => addHistory(history));
+
+    io.on('error-message', error => addErrorMessage(error));
 
     io.on('user-connected', name => addInfoMessage(`${name} has connected.`));
 
     io.on('chat-message', data => {
-      console.log(data);
       addChatMessage(data.username, data.message)
     });
 

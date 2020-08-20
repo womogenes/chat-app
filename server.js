@@ -103,42 +103,58 @@ SOCKET.IO
 */
 
 const activeUsers = {};
+const history = [];
 
 const authenticateToken = (token, action) => {
   if (token == null) action(401);
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-    if (err) action(403);
-    action(user);
+    if (err) {
+      action(403);
+      return;
+    }
+    action(user.username);
   });
 };
 
 io.on('connection', (socket) => {
 
-  socket.on('login', async token => {
-    let result = null;
-    const setResult = (x) => {
-      result = x;
-    }
-    await authenticateToken(token, setResult);
+  const handleLogin = (result) => {
     if (result === 401 || result === 403) {
-      socket.emit('login-attempt', 'bad-token');
+      socket.emit('error-message', 'Invalid credentials. Please try logging in again.');
       console.log('Bad login attempt.');
-      return;
+      socket.disconnect();
+
+    } else {
+      const username = result;
+      activeUsers[socket.id] = { name: username };
+      socket.emit('login-attempt', `You have joined. (Username ${username}.)`);
+      socket.broadcast.emit('user-connected', username);
+      socket.emit('chat-history', history);
     }
-    const username = result.username;
-    activeUsers[socket.id] = { name: username };
-    socket.emit('login-attempt', `You have joined. (Username ${username}.)`);
-    socket.broadcast.emit('user-connected', username);
+  }
+
+  socket.on('login', token => {
+    authenticateToken(token, handleLogin);
   
     socket.on('send-chat-message', (message) => {
       if (/^\s*$/.test(message)) return;
       console.log(`${activeUsers[socket.id].name}: ${message}`);
+      history.push({
+        type: 'chat',
+        name: activeUsers[socket.id].name,
+        text: message
+      });
+      if (history.length > 20) {
+        history.shift();
+      }
       io.emit('chat-message', {message: message, username: activeUsers[socket.id].name});
     });
   
     socket.on('disconnect', () => {
-      io.emit('user-disconnected', activeUsers[socket.id].name);
-      delete activeUsers[socket.id];
+      if (socket.id in activeUsers) {
+        io.emit('user-disconnected', activeUsers[socket.id].name);
+        delete activeUsers[socket.id];
+      }
     });
   });
 });

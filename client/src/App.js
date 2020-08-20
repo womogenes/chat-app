@@ -25,7 +25,7 @@ const App = () => {
       <Switch>
 
         <Route exact path='/'>
-          <Redirect to='/login' />
+          <Redirect to='/chat' />
         </Route>
 
         <Suspense fallback={
