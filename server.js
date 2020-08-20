@@ -105,6 +105,17 @@ SOCKET.IO
 const activeUsers = {};
 const history = [];
 
+function formatTime(date) {
+  var hours = date.getHours();
+  var minutes = date.getMinutes();
+  var ampm = hours >= 12 ? 'PM' : 'PN';
+  hours = hours % 12;
+  hours = hours ? hours : 12;
+  minutes = minutes < 10 ? '0' + minutes : minutes;
+  var strTime = hours + ':' + minutes + ' ' + ampm;
+  return strTime;
+}
+
 const authenticateToken = (token, action) => {
   if (token == null) action(401);
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
@@ -142,12 +153,17 @@ io.on('connection', (socket) => {
       history.push({
         type: 'chat',
         name: activeUsers[socket.id].name,
-        text: message
+        text: message,
+        timestamp: formatTime(new Date)
       });
       if (history.length > 20) {
         history.shift();
       }
-      io.emit('chat-message', {message: message, username: activeUsers[socket.id].name});
+      io.emit('chat-message', {
+        message: message,
+        username: activeUsers[socket.id].name,
+        timestamp: formatTime(new Date)
+      });
     });
   
     socket.on('disconnect', () => {

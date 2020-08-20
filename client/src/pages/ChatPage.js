@@ -60,11 +60,12 @@ const ChatPage = () => {
     };
     setMessages([...messagesRef.current, newMessage]);
   };
-  const addChatMessage = (name, text) => {
+  const addChatMessage = (name, text, timestamp) => {
     const newMessage = {
       type: 'chat',
       name: name,
       text: text,
+      timestamp: timestamp,
       id: messagesRef.current.length
     };
     setMessages([...messagesRef.current, newMessage]);
@@ -83,7 +84,7 @@ const ChatPage = () => {
     io.on('user-connected', name => addInfoMessage(`${name} has connected.`));
 
     io.on('chat-message', data => {
-      addChatMessage(data.username, data.message)
+      addChatMessage(data.username, data.message, data.timestamp)
     });
 
     io.on('login-attempt', data => addInfoMessage(data));
@@ -117,9 +118,11 @@ const ChatPage = () => {
 
   return (
     <div id='chat-root'>
-      <div id='header'><h2>Chat App</h2></div>
-      <ChatMessageList messages={messages} />
-      <SendForm submitAction={onSendMessage} />
+      <div id='header'><h2>Chat Lobby</h2></div>
+      <div id='chat-wrapper'>
+        <ChatMessageList messages={messages} />
+        <SendForm submitAction={onSendMessage} />
+      </div>
     </div>
   );
 };

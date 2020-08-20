@@ -1,6 +1,8 @@
 #register-root {
   display: flex;
   justify-content: center;
+  align-items: center;
+  height: 100%;
   padding: 0 20px;
 }
 
@@ -17,7 +19,6 @@
     padding-top: 10px;
     padding-bottom: 20px;
     border: 1px solid #000;
-    border-top: none;
   }
 
   h2 {
@@ -90,4 +91,13 @@
     color: #14af00;
   }
 
+  @media only screen and (max-width: 475px) {
+    #content-wrapper {
+      display: flex;
+      flex-direction: column;
+  
+      margin: 0 20px;
+      border: none;
+    }
+  }
 }

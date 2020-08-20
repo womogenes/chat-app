@@ -6,13 +6,20 @@ const ChatMessage = (props) => {
     return (
       <div className='chat-message' key={props.id}>
         <p className='chat-message-name'>{props.name}</p><br />
-        <p className='chat-message-text'>{props.text}</p>
+        
+        <div className='chat-message-timetext'>
+          <p className='chat-message-text'>{props.text}</p>
+          <p className='chat-message-time'>{props.timestamp}</p>
+        </div>
       </div>
     );
   }
   return (
     <div className='chat-message' key={props.id}>
-      <p className='chat-message-text'>{props.text}</p>
+      <div className='chat-message-timetext'>
+        <p className='chat-message-text'>{props.text}</p>
+        <p className='chat-message-time'>{props.timestamp}</p>
+      </div>
     </div>
   );
 }
@@ -50,7 +57,7 @@ const ChatMessageList = (props) => {
               }
               if (message.type === 'chat') {
                 const displayName = message.id === 0 || messages[index - 1].name !== message.name;
-                return <ChatMessage key={message.id} name={message.name} text={message.text} displayName={displayName} />
+                return <ChatMessage key={message.id} name={message.name} text={message.text} timestamp={message.timestamp} displayName={displayName} />
               }
               return null;
             })
