@@ -7,6 +7,7 @@ import {
   Route,
   Redirect
 } from 'react-router-dom';
+import './ui.js';
 import './App.css';
 const ChatPage = React.lazy(() => import( './pages/ChatPage.js'));
 const LoginPage = React.lazy(() => import('./pages/LoginPage.js'));
@@ -20,16 +21,13 @@ const App = () => {
 
     <Router>
 
-      <Route exact path='/'>
-        <Redirect to='/chat' />
-      </Route>
-
       <Suspense fallback={
         <div id='loading-screen'><p>Loading...</p></div>
       }>
         <Switch>
+          <Route exact path='/'><Redirect to='chat' /></Route>
           <Route path='/login' render={(props) => (<LoginPage {...props} />)} />
-          <Route path='/chat' render={(props) => (<ChatPage {...props} />)} />
+          <Route path='/chat' component={ChatPage} /> />
           <Route path='/register' component={RegisterPage} />
           <Route path='/logout' component={LogoutPage} />
           <Route path='/404' component={NotFoundPage} />

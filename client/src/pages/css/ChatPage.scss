@@ -59,13 +59,14 @@
     flex-direction: column;
     padding: 0 15px 15px 15px;
     width: 300px;
-    background-color: #f4f4f4;
+    background-color: var(--fill-color-light);
     overflow-x: hidden;
   }
 
   .active-user {
     display: flex;
     justify-content: space-between;
+    color: var(--text-color);
   }
 
   .active-user-name-self {
@@ -98,18 +99,6 @@
     height: 10px;
   }
 
-  .chat-message {
-    display: flex;
-    align-items: center;
-    background-color: #fff;
-    padding: 2px 10px;
-    margin-right: 10px;
-    border-radius: 5px;
-  }
-  .chat-message:hover {
-    background-color: #f4f4f4;
-  }
-
   .pfp-div {
     height: 50px;
     width: 60px;
@@ -127,6 +116,18 @@
     flex-direction: column;
     margin-left: 7.5px;
     width: 100%;
+  }
+  
+  .chat-message {
+    display: flex;
+    align-items: center;
+    background-color: var(--bg-color);
+    padding: 2px 10px;
+    margin-right: 10px;
+    border-radius: 5px;
+  }
+  .chat-message:hover {
+    background-color: var(--fill-color-light);
   }
 
   .chat-message-timetext {
@@ -164,21 +165,26 @@
 
   .info-message {
     font-weight: bold;
-    color: #8b8b8b;
     padding: 5px;
+  }
+  .info-message p {
+    color: var(--info-text-color);
   }
 
   .error-message {
     margin: 10px 0;
     padding: 5px;
     font-weight: bold;
-    color: #f03636
+    word-wrap: break-word;
+  }
+  .error-message p {
+    color: var(--error-color);
   }
 
   #send-container {
     display: flex;
     bottom: 0;
-    background-color: white;
+    background-color: var(--bg-color);
     width: 100%;
   }
 
@@ -191,7 +197,8 @@
     border-radius: 5px;
     border: none; /* 1px solid #000; */
     outline: none;
-    background-color: #eee;
+    color: var(--text-color);
+    background-color: var(--fill-color);
   }
 
   @media only screen and (max-width: 475px) {

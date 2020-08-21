@@ -23,20 +23,25 @@ body {
   
   font-size: 13pt;
   font-family: serif;
+  background-color: var(--bg-color);
+}
+
+h1, h2, h3 {
+  color: var(--text-color);
 }
 
 p {
   display: inline;
   margin: 0;
   padding: 0;
+  color: var(--text-color);
 }
 
-a:link {
-  color: #0000ee;
+a:link, a:link p {
+  color: var(--link-color);
 }
-
-a:visited {
-  color: #551abb;
+a:visited, a:visited p {
+  color: var(--link-color);
 }
 
 input {
@@ -44,23 +49,23 @@ input {
   font-size: 11pt;
   padding: 2px 5px;
   border-radius: 3px;
-  border: 1px solid #000;
+  border: 1px solid var(--border-color);
 }
 
 button {
   font-size: 12pt;
   padding: 3px 7px;
   border-radius: 3px;
-  border: 1px solid #000;
-  background-color: #eee;
+  border: 1px solid var(--border-color);
+  background-color: var(--btn-bg-on);
 }
 
 button:hover {
-  background-color: #fff;
+  background-color: var(--btn-bg-hover);
 }
 
 button:active {
-  background-color: #aaa;
+  background-color: var(--btn-bg-active);
 }
 
 #loading-screen {
