@@ -22,6 +22,7 @@ const formatTime = (date) => {
   var ampm = hours >= 12 ? 'PM' : 'PM';
   hours = hours % 12;
   hours = hours ? hours : 12;
+  hours = hours < 10 ? '0' + hours : hours;
   minutes = minutes < 10 ? '0' + minutes : minutes;
   var strTime = hours + ':' + minutes + ' ' + ampm;
   return strTime;
@@ -55,12 +56,15 @@ io.on('connection', (socket) => {
       const username = result;
       activeUsers[socket.id] = { name: username };
       socket.emit('login-attempt', [200, username]);
-      socket.broadcast.emit('user-connected', [username, socket.id]);
+      socket.broadcast.emit('user-connected', {
+        name: username,
+        id: socket.id
+      });
       socket.emit('active-users', Object.keys(activeUsers).map(id => {
         return { name: activeUsers[id].name, id: id };
       }));
       socket.emit('chat-history', history);
-      console.log('Connection and authentication successful!');
+      console.log('Authentication successful!');
 
       startClientListening();
     }
@@ -92,7 +96,10 @@ io.on('connection', (socket) => {
   
     socket.on('disconnect', () => {
       if (socket.id in activeUsers) {
-        io.emit('user-disconnected', (activeUsers[socket.id].name, socket.id));
+        io.emit('user-disconnected', {
+          name: activeUsers[socket.id].name,
+          id: socket.id
+        });
         delete activeUsers[socket.id];
       }
     });

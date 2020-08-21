@@ -42,7 +42,7 @@
   #active-user-list-wrapper {
     display: flex;
     flex-direction: column;
-    padding: 0 15px;
+    padding: 0 15px 15px 15px;
     width: 300px;
     background-color: #f4f4f4;
     overflow-x: hidden;
@@ -51,10 +51,6 @@
   .active-user {
     display: flex;
     justify-content: space-between;
-  }
-
-  .active-user-name {
-    font-weight: bold;
   }
 
   .active-user-name-self {
@@ -104,13 +100,17 @@
     width: 60px;
     min-width: 60px;
     padding: 5px 3px;
+  }
+
+  .pfp {
+    // clip-path: circle(20px at 20px 20px);
     border-radius: 10px;
   }
 
   .chat-message-name-timetext {
     display: flex;
     flex-direction: column;
-    margin-left: 1px;
+    margin-left: 7.5px;
     width: 100%;
   }
 
@@ -123,8 +123,7 @@
     align-items: center;
   }
   .chat-message-timetext-nameless .chat-message-text {
-    vertical-align: center;
-    margin-left: 11px;
+    margin-left: 10px;
   }
 
   .chat-message-name {

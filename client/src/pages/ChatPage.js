@@ -17,7 +17,7 @@ let ENDPOINT = null;
 if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
   ENDPOINT = 'http://localhost:5000';
 } else {
-  ENDPOINT = '/';
+  ENDPOINT = window.location.origin;
 }
 const io = socketIO(ENDPOINT);
 
@@ -86,13 +86,13 @@ const ChatPage = () => {
     io.on('error-message', error => addErrorMessage(error));
 
     io.on('user-connected', user => {
-      addInfoMessage(`${user[0]} has connected.`);
-      setActiveUsers([...activeUsersRef.current, { name: user[0], id: user[1] }]);
+      addInfoMessage(`${user.name} has connected.`);
+      setActiveUsers([...activeUsersRef.current, { name: user.name, id: user.id }]);
     });
 
-    io.on('user-disconnected', (name, id) => {
-      addInfoMessage(`${name} has disconnected.`);
-      setActiveUsers(activeUsersRef.current.filter(user => (user.name !== name && user.id !== id)));
+    io.on('user-disconnected', user => {
+      addInfoMessage(`${user.name} has disconnected.`);
+      setActiveUsers(activeUsersRef.current.filter(u => (user.name !== u.name || user.id !== u.id)));
     })
 
     io.on('chat-message', data => {
