@@ -11,6 +11,10 @@
 
 #chat-root {
 
+  h3 {
+    margin: 20px 0 10px 0;
+  }
+
   #no-token {
     padding: 20px;
   }
@@ -41,6 +45,21 @@
     padding: 0 15px;
     width: 300px;
     background-color: #f4f4f4;
+    overflow-x: hidden;
+  }
+
+  .active-user {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .active-user-name {
+    font-weight: bold;
+  }
+
+  .active-user-name-self {
+    font-weight: bold;
+    font-style: italic;
   }
 
   #message-wrapper {
@@ -49,6 +68,7 @@
     flex-grow: 1;
     min-height: 0px;
     margin-bottom: 10px;
+    padding-bottom: 10px;
     overflow: auto;
   }
 
@@ -63,20 +83,48 @@
     padding: 0 0px;
   }
 
+  .spacer {
+    height: 10px;
+  }
+
   .chat-message {
+    display: flex;
+    align-items: center;
     background-color: #fff;
     padding: 2px 10px;
     margin-right: 10px;
     border-radius: 5px;
-    word-wrap: break-word;
   }
   .chat-message:hover {
     background-color: #f4f4f4;
   }
 
+  .pfp-div {
+    height: 50px;
+    width: 60px;
+    min-width: 60px;
+    padding: 5px 3px;
+    border-radius: 10px;
+  }
+
+  .chat-message-name-timetext {
+    display: flex;
+    flex-direction: column;
+    margin-left: 1px;
+    width: 100%;
+  }
+
   .chat-message-timetext {
     display: flex;
     justify-content: space-between;
+  }
+  .chat-message-timetext-nameless {
+    display: flex;
+    align-items: center;
+  }
+  .chat-message-timetext-nameless .chat-message-text {
+    vertical-align: center;
+    margin-left: 11px;
   }
 
   .chat-message-name {
@@ -88,12 +136,12 @@
   }
 
   .chat-message-text {
-    margin-left: 1em;
+    word-break: break-all;
   }
 
   .chat-message-time {
+    font-size: 10pt;
     visibility: hidden;
-    margin-left: 1em;
   }
   .chat-message:hover .chat-message-time {
     visibility: visible;
@@ -101,7 +149,7 @@
 
   .info-message {
     font-weight: bold;
-    color: #1165aa;
+    color: #8b8b8b;
     padding: 5px;
   }
 
@@ -137,6 +185,21 @@
   
       margin: 0 20px;
       border: none;
+    }
+
+    #message-input {
+      margin: 0;
+    }
+
+    #chat-wrapper {
+      flex-grow: 1;
+    }
+
+    #active-user-list-wrapper {
+      display: none;
+      width: 100%;
+      height: 500px;
+      margin-top: 15px;
     }
   }
 }

@@ -14,10 +14,6 @@ const RegisterPage = React.lazy(() => import('./pages/RegisterPage.js'));
 
 const App = () => {
 
-  const changeAuthToken = (token) => {
-    localStorage.setItem('authToken', token);
-  }
-
   return (
 
     <Router>
@@ -31,7 +27,7 @@ const App = () => {
         <Suspense fallback={
           <div id='loading-screen'><p>Loading...</p></div>
         }>
-          <Route path='/login' render={(props) => (<LoginPage {...props} setAuthToken={changeAuthToken} />)} />
+          <Route path='/login' render={(props) => (<LoginPage {...props} />)} />
           <Route path='/chat' render={(props) => (<ChatPage {...props} />)} />
           <Route path='/register' component={RegisterPage} />
         </Suspense>

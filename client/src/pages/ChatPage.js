@@ -6,6 +6,7 @@ import React, {
 import {
   Link
 } from 'react-router-dom';
+import axios from 'axios';
 import socketIO from 'socket.io-client';
 import './css/ChatPage.scss';
 import ChatMessageList from '../components/ChatMessage.js';
@@ -29,9 +30,7 @@ const ChatPage = () => {
   messagesRef.current = messages;
   const activeUsersRef = useRef();
   activeUsersRef.current = activeUsers;
-  const authToken = localStorage.getItem('authToken');
-
-  console.log(activeUsers);
+  let accessToken = localStorage.getItem('accessToken');
 
   // Add a new message handle.
   const addHistory = (history) => {
@@ -75,8 +74,8 @@ const ChatPage = () => {
   };
   
   const setIO = () => {
-    if (authToken != null) {
-      io.emit('login', authToken);
+    if (accessToken != null) {
+      io.emit('login', accessToken);
       addInfoMessage('Awaiting response from server...');
     }
 
@@ -86,16 +85,14 @@ const ChatPage = () => {
 
     io.on('error-message', error => addErrorMessage(error));
 
-    io.on('user-connected', (name, id) => {
-      addInfoMessage(`${name} has connected.`);
-      if (name === myUsername) return;
-      setActiveUsers([...activeUsersRef.current, { name: name, id: id }]);
+    io.on('user-connected', user => {
+      addInfoMessage(`${user[0]} has connected.`);
+      setActiveUsers([...activeUsersRef.current, { name: user[0], id: user[1] }]);
     });
 
-    io.on('user-disconnected', name => {
+    io.on('user-disconnected', (name, id) => {
       addInfoMessage(`${name} has disconnected.`);
-      if (name === myUsername) return;
-      setActiveUsers(activeUsersRef.current.filter(user => user.name !== name));
+      setActiveUsers(activeUsersRef.current.filter(user => (user.name !== name && user.id !== id)));
     })
 
     io.on('chat-message', data => {
@@ -103,23 +100,40 @@ const ChatPage = () => {
     });
 
     io.on('login-attempt', data => {
-      myUsername = data;
-      addInfoMessage(`You have joined. (Username ${data})`);
+      if (data[0] === 403 || data[0] === 401) {
+        setTimeout(() => {
+          const data = {
+            refreshToken: localStorage.getItem('refreshToken')
+          };
+          axios.post(new URL('/token', ENDPOINT), data)
+            .then(res => {
+              console.log(res);
+              localStorage.setItem('accessToken', res.data);
+              io.emit('login', res.data);
+            })
+            .catch(error => {
+              if (!error.response || error.response.status === 403 || error.response.status === 401) {
+                addErrorMessage('An error occured with authentication. Please try logging in again.');
+              }
+            });
+        }, 100);
+        return;
+      }
+      console.log(data);
+      myUsername = data[1];
+      addInfoMessage(`You have joined. (Username ${myUsername})`);
     });
-
-    return () => {
-      io.close();
-    }
   }
   
   const onSendMessage = (message) => {
     //if (/^\s*$/.test(message)) return;
     io.emit('send-chat-message', message);
+    console.log('emit emit');
   }
   
   useEffect(setIO, []);
   
-  if (authToken == null) {
+  if (accessToken == null) {
     return (
       <div id='chat-root'>
         <div id='header'><h2>Chat App</h2></div>
@@ -145,7 +159,10 @@ const ChatPage = () => {
           <SendForm submitAction={onSendMessage} />
         </div>
         <div id='active-user-list-wrapper'>
-          <ActiveUserList activeUsers={activeUsers} />
+          <ActiveUserList activeUsers={activeUsers} self={{
+            username: myUsername,
+            id: io.id
+          }} />
         </div>
       </div>
     </div>

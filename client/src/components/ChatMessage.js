@@ -1,27 +1,32 @@
 import React from 'react';
 
 const ChatMessage = (props) => {
-  const { displayName } = props;
+  const { id, name, text, timestamp, displayName } = props;
   if (displayName) {
+    const imgURL = `https://api.adorable.io/avatars/40/${name}@adorable.io.png`
     return (
       <>
-        <br />
-        <div className='chat-message' key={props.id}>
-          <p className='chat-message-name'>{props.name}</p><br />
-          
-          <div className='chat-message-timetext'>
-            <p className='chat-message-text'>{props.text}</p>
-            <p className='chat-message-time'>{props.timestamp}</p>
+        <div className='spacer'></div>
+        <div className='chat-message' key={id}>
+          <div className='pfp-div'>
+            <img className='pfp' src={imgURL} alt={`pfp of ${name}`} />
+          </div>
+          <div className='chat-message-name-timetext'>
+            <p className='chat-message-name'>{name}</p>
+            <div className='chat-message-timetext'>
+              <p className='chat-message-text'>{text}</p>
+              <p className='chat-message-time'>{timestamp}</p>
+            </div>
           </div>
         </div>
       </>
     );
   }
   return (
-    <div className='chat-message' key={props.id}>
-      <div className='chat-message-timetext'>
-        <p className='chat-message-text'>{props.text}</p>
-        <p className='chat-message-time'>{props.timestamp}</p>
+    <div className='chat-message' key={id}>
+      <div className='chat-message-timetext-nameless'>
+        <p className='chat-message-time'>{timestamp}</p>
+        <p className='chat-message-text'>{text}</p>
       </div>
     </div>
   );

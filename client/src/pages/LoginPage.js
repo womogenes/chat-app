@@ -40,8 +40,7 @@ const StatusDisplay = (props) => {
   return null;
 }
 
-const LoginPage = (props) => {
-  const { setAuthToken } = props;
+const LoginPage = () => {
 
   const [status, setStatus] = useState('not-submitted');
   const [username, setUsername] = useState('');
@@ -56,7 +55,6 @@ const LoginPage = (props) => {
   } else {
     hostname = window.location.origin;
   }
-  console.log(hostname);
 
   const logIn = (event) => {
     event.preventDefault();
@@ -72,8 +70,10 @@ const LoginPage = (props) => {
     axios.post(url, data)
       .then(res => {
         console.log(res);
-        const token = res.data.accessToken;
-        setAuthToken(token);
+        const accessToken = res.data.accessToken;
+        const refreshToken = res.data.refreshToken;
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
         setStatus('success');
       })
       .catch(error => {

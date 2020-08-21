@@ -1,20 +1,28 @@
 import React from 'react';
 
 const ActiveUserList = (props) => {
-  const { activeUsers } = props;
-  console.log(activeUsers);
+  const { activeUsers, self } = props;
 
   return (
     <>
       <h3>Active Users</h3>
       {
         activeUsers.map(user => {
-          console.log(user.id);
-          return (
-            <div className='activeUser' key={user.id}>
-              <p id={user.id}>{user.name}</p>
-            </div>
-          );
+          if (user.name === self.username && user.id === self.id) {
+            return (
+              <div className='active-user' key={user.id}>
+                <p className='active-user-name-self'>{user.name}</p>
+                <p>{user.id.substring(0, 6)}</p>
+              </div>
+            );
+          } else {
+            return (
+              <div className='active-user' key={user.id}>
+                <p className='active-user-name'>{user.name}</p>
+                <p>{user.id.substring(0, 6)}</p>
+              </div>
+            );
+          }
         })
       }
     </>

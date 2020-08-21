@@ -14,9 +14,17 @@ module.exports = (app) => {
   app.use(express.static(path.join(__dirname, '/client/public')));
   app.use(express.static(path.join(__dirname, '/')));
 
+  const generateAccessToken = (user) => {
+    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '2m' });
+  };
+
   // Password system.
-  const rawData = fs.readFileSync('./data/users.json');
+  let rawData = fs.readFileSync('./data/users.json');
   const users = JSON.parse(rawData);
+
+  rawData = fs.readFileSync('./data/refreshTokens.json');
+  let refreshTokens = JSON.parse(rawData);
+  ('refresh tokens: ', refreshTokens);
 
   app.get('/users', (req, res) => {
     res.json(users);
@@ -24,9 +32,10 @@ module.exports = (app) => {
 
   app.post('/users', cors(), async (req, res) => {
     console.log('=== ACCOUNT CREATION ATTEMPT ===');
+    const username = req.body.username.toLowerCase();
     try {
       for (let i in users) {
-        if (users[i].username === req.body.username) {
+        if (users[i].username === username) {
           res.status(400).send('username-exists');
           return;
         }
@@ -34,11 +43,11 @@ module.exports = (app) => {
       // Salt and hash the password.
       const hashedPassword = await bcrypt.hash(req.body.password, 10);
       const user = {
-        username: req.body.username,
+        username: username.toLowerCase(),
         password: hashedPassword
       };
       users.push(user);
-      const data = JSON.stringify(users, null, 2);
+      const data = JSON.stringify(users, null, 4);
       fs.writeFile('./data/users.json', data, (err) => {
         if (err) throw err;
         console.log('Users file saved.');
@@ -52,19 +61,29 @@ module.exports = (app) => {
 
   app.post('/users/login', cors(), async (req, res) => {
     console.log('=== LOGIN ATTEMPT ===');
-    const username = req.body.username;
+    const username = req.body.username.toLowerCase();
     const password = req.body.password;
 
     const user = users.find(user => user.username === username);
-    console.log(user);
     if (user == null) {
       return res.status(400).send('no-username');
     }
     if (true) { //try {
       if (await bcrypt.compare(password, user.password)) {
         // Correct password!
-        const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
-        res.json({ accessToken: accessToken });
+        const accessToken = generateAccessToken({ name: user.username });
+        const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET);
+        refreshTokens.push(refreshToken);
+        const data = JSON.stringify(refreshTokens, null, 4);
+        fs.writeFile('./data/refreshTokens.json', data, (err) => {
+          if (err) throw err;
+          console.log('Refresh tokens file saved.');
+        })
+
+        res.json({
+          accessToken: accessToken,
+          refreshToken: refreshToken
+        });
 
       } else {
         console.log('wrong password');
@@ -74,6 +93,17 @@ module.exports = (app) => {
       res.status(500).send();
     }
   });
+
+  app.post('/token', (req, res) => {
+    const refreshToken = req.body.refreshToken;
+    if (refreshToken == null) return res.sendStatus(401);
+    if (!refreshTokens.includes(refreshToken)) return res.sendStatus(403);
+    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+      if (err) return res.sendStatus(403);
+      const accessToken = generateAccessToken({ name: user.username });
+      res.json(accessToken);
+    });
+  })
 
   // Handles any requests that don't match the ones above
   app.get('*', (req, res) => {
