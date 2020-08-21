@@ -1,0 +1,31 @@
+#notfound-root {
+  padding: 50px;
+  height: 100%;
+}
+
+#notfound-root {
+
+    #notfound-wrapper {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+    }
+
+    #title {
+      margin-bottom: 0;
+    }
+
+    #frowny {
+      margin: 0;
+      margin-right: 10px;
+      padding-bottom: 17px;
+      transform: rotate(90deg);
+    }
+
+    #notfound-content {
+      width: 100%;
+      max-width: 500px;
+    }
+}

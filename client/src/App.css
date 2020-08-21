@@ -31,6 +31,14 @@ p {
   padding: 0;
 }
 
+a:link {
+  color: #0000ee;
+}
+
+a:visited {
+  color: #551abb;
+}
+
 input {
   margin-right: 10px;
   font-size: 11pt;
