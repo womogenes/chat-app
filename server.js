@@ -75,6 +75,7 @@ io.on('connection', (socket) => {
   });
 
   const startClientListening = () => {
+    console.log(`Listening to client ${socket.id}.`)
     socket.on('send-chat-message', (message) => {
       if (/^\s*$/.test(message)) return;
       console.log(`${socket.id}, ${activeUsers[socket.id].name}: ${message}`);
@@ -101,6 +102,7 @@ io.on('connection', (socket) => {
           id: socket.id
         });
         delete activeUsers[socket.id];
+        socket.disconnect();
       }
     });
   };

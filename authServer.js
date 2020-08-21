@@ -103,7 +103,17 @@ module.exports = (app) => {
       const accessToken = generateAccessToken({ name: user.username });
       res.json(accessToken);
     });
-  })
+  });
+
+  app.delete('/logout', (req, res) => {
+    refreshTokens = refreshTokens.filter(token => token !== req.body.refreshToken);
+    const data = JSON.stringify(refreshTokens, null, 4);
+    fs.writeFile('./data/refreshTokens.json', data, (err) => {
+      if (err) throw err;
+      console.log('Refresh tokens file saved.');
+    })
+    res.sendStatus(204);
+  });
 
   // Handles any requests that don't match the ones above
   app.get('*', (req, res) => {

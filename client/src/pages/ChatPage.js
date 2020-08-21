@@ -12,6 +12,7 @@ import './css/ChatPage.scss';
 import ChatMessageList from '../components/ChatMessage.js';
 import SendForm from '../components/SendForm.js';
 import ActiveUserList from '../components/ActiveUserList.js';
+import ChatMenu from '../components/ChatMenu';
 
 let ENDPOINT = null;
 if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
@@ -151,8 +152,9 @@ const ChatPage = () => {
   return (
     <div id='chat-root'>
       <div id='header'>
-        <h2>Chat Lobby</h2>
+        <h2 id='title'>Chat Lobby</h2>
       </div>
+      <ChatMenu />
       <div id='content-wrapper'>
         <div id='chat-wrapper'>
           <ChatMessageList messages={messages} />

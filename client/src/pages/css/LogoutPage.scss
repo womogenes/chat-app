@@ -1,0 +1,26 @@
+
+#logout-root {
+  padding: 20px;
+  height: 100%;
+}
+
+#logout-root {
+
+  #logout-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+
+  #logout-content {
+    display: flex;
+    flex-direction: column;
+    padding: 50px;
+    border: 1px solid #000;
+    -webkit-box-shadow: 0px 0px 20px 10px rgba(230,230,230,1);
+    -moz-box-shadow: 0px 0px 20px 10px rgba(230,230,230,1);
+    box-shadow: 0px 0px 40px -5px rgba(230,230,230,1);
+  }
+}

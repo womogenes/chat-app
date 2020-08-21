@@ -20,7 +20,22 @@
   }
 
   #header {
-    align-self: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+
+  #title {
+    margin: 30px 0;
+  }
+
+  #chat-menu {
+    display: flex;
+    justify-content: flex-end;
+    font-size: 11pt;
+    width: 100%;
+    margin-bottom: 20px;
   }
 
   #content-wrapper {
@@ -128,6 +143,7 @@
 
   .chat-message-name {
     font-weight: bold;
+    margin-bottom: 4px;
   }
 
   .chat-message-name-hidden {
